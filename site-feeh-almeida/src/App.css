@@ -2,11 +2,11 @@
 
 #root {
   --header-height: 3rem;
-
-  --title-color: #FFF;
+  --color-fe: #483cf3;
+  --title-color: #5a55bd;
   --title-color-dark: #000000;
-  --text-color: #4a4857;
-  --body-color: #fa748f;
+  --text-color: #3f3f3f;
+  --body-color: #f0f0f0;
   --container-color: #fff;
 
   --body-font: "Poppins", sans-serif;
@@ -125,14 +125,16 @@ img {
 
 .button {
   display: inline-block;
-  background-color: var(--container-color);
+  background-color: var(--text-color);
   padding: 1.25rem 2rem;
   border-radius: 1rem;
   font-weight: var(--font-medium);
+  color: var(--body-color);
 }
 
 .button:hover {
   background-color: var(--title-color-dark);
+  scale: calc(1.1);
 }
 
 .button__icon {
@@ -142,4 +144,9 @@ img {
 .button__flex {
   display: inline-flex;
   align-items: center;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
 }
