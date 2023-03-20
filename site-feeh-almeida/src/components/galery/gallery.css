@@ -1,0 +1,48 @@
+ .container__gallery {
+   width: 100%;
+   min-height: 100vh;
+   margin: 0 auto;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ }
+
+ .title__gallery {
+   padding-bottom: 5.5rem;
+ }
+
+ .carousel {
+   cursor: grab;
+   overflow: hidden;
+ }
+
+ .img-container {
+   display: flex;
+   cursor: grab;
+ }
+
+ .item {
+   min-width: 300px;
+   min-height: 200px;
+   padding: 14px;
+ }
+
+ .item img {
+   /* background-repeat: no-repeat;
+   background-size: cover; */
+   width: 80%;
+   height: 75%;
+   pointer-events: none;
+   border-radius: 5%;
+ }
+
+
+
+
+ .image-none {
+   display: none;
+ }
+
+ .image-display {
+   display: block;
+ }
