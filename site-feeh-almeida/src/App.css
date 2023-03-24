@@ -7,6 +7,7 @@
   --title-color-dark: #000000;
   --text-color: #3f3f3f;
   --body-color: #f0f0f0;
+  /* --body-color: #3f3f3f; */
   --container-color: #fff;
 
   --body-font: "Poppins", sans-serif;
@@ -151,7 +152,10 @@ img {
   gap: 1.5rem;
 }
 
+
+
 @media screen and (max-width: 992px) {
+
   .container {
     margin-left: var(--mb-1-5);
     margin-right: var(--mb-1-5);
