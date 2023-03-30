@@ -5,17 +5,17 @@ import About from "./components/about/About";
 import Gallery from "./components/galery/Gallery";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import Prices from "./components/prices/Prices";
 
 function App() {
   const [ref, inView] = useInView({
-    threshold: 0.1,
+    threshold: 0.4,
     triggerOnce: false,
     rootMargin: "-100px 0px",
   });
   return (
     <>
       <Header />
-
       <main className="main">
         <Home />
         <motion.div
@@ -26,8 +26,8 @@ function App() {
         >
           <About />
         </motion.div>
-
         <Gallery />
+        <Prices />
       </main>
     </>
   );

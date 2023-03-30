@@ -9,6 +9,7 @@
   align-items: center;
 }
 
+
 .home__social {
   display: grid;
   grid-template-columns: max-content;
@@ -67,6 +68,18 @@
   width: 300px;
   height: 297px;
   border-radius: 20px;
+}
+
+.icon-contact {
+  background-color: var(--text-color);
+  color: var(--body-color);
+  width: 30px;
+  height: 30px;
+  margin-left: 1rem;
+}
+
+.button:hover>.icon-contact {
+  background-color: var(--title-color-dark);
 }
 
 @media screen and (max-width: 992px) {

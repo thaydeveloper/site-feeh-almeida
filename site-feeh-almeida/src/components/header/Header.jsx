@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./header.css";
+import { UilImages, UilBill, UilCalender } from "@iconscout/react-unicons";
 
 const Header = () => {
   const [toggle, setToggle] = useState(false);
@@ -27,13 +28,18 @@ const Header = () => {
 
             <li className="nav__item">
               <a href="#gallery" className="nav__link">
-                <i className="uil uil-calender nav__icon"></i> Galeria
+                <UilImages className="nav__icon" /> Galeria
+              </a>
+            </li>
+            <li className="nav__item">
+              <a href="#prices" className="nav__link">
+                <UilBill className="nav__icon" /> Preços
               </a>
             </li>
 
             <li className="nav__item">
               <a href="#scheduling" className="nav__link">
-                <i className="uil uil-calender nav__icon"></i> Agendamentos
+                <UilCalender className="nav__icon" /> Agendamentos
               </a>
             </li>
 

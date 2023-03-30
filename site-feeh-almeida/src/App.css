@@ -4,9 +4,9 @@
   --header-height: 3rem;
   --color-fe: #483cf3;
   --title-color: #5a55bd;
-  --title-color-dark: #000000;
-  --text-color: #3f3f3f;
-  --body-color: #f0f0f0;
+  --title-color-dark: #5a55bd;
+  --text-color: #fffefe;
+  --body-color: #202020;
   /* --body-color: #3f3f3f; */
   --container-color: #fff;
 
@@ -54,6 +54,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  background: var(--body-color);
 }
 
 html {
@@ -100,6 +101,7 @@ img {
 }
 
 .section {
+  background-color: var(--body-color);
   padding: 6rem 0 2rem;
 }
 
