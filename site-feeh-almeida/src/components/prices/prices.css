@@ -6,6 +6,7 @@
 
 .title__prices {
   margin-bottom: 5rem;
+  font-size: var(--big-font-size);
 }
 
 .content__prices {
@@ -66,4 +67,12 @@
   align-items: center;
   font-weight: 500;
   text-transform: uppercase;
+}
+
+.image__card {
+  /* width: 150px;
+  height: 150px; */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }

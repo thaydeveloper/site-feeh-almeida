@@ -1,11 +1,11 @@
 export const tablePrices = [
   {
-    title: "Alongamento Encapsulada",
+    title: "Alongamento Fibra Encapsulada",
     id: 1,
     price: "R$ 135,00",
   },
   {
-    title: "Alongamento Fibra",
+    title: "Alongamento Fibra Comum",
     id: 2,
     price: "R$ 110,00",
   },

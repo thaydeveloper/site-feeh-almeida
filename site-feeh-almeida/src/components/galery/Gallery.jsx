@@ -8,9 +8,9 @@ const Gallery = () => {
   const [width, setWidth] = useState();
   const carousel = useRef();
   const [ref, isInView] = useInView({
-    threshold: 0.1,
+    threshold: 0,
     triggerOnce: false,
-    rootMargin: "-100px 0px",
+    rootMargin: "-10px 0px",
   });
 
   useEffect(() => {
