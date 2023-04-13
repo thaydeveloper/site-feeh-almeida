@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import "./prices.css";
 import { tableMaintenance } from "../../services/prices";
-import { tablePrices } from "../../services/prices";
+
 import images from "../../services/bestImages";
 
 import { motion } from "framer-motion";

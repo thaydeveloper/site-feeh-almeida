@@ -1,6 +1,7 @@
 .scheduling {
   background-color: var(--body-color);
   text-align: center;
+
 }
 
 .content__scheduling {
@@ -8,6 +9,11 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+
+}
+
+.title__scheduling {
+  font-size: var(--big-font-size);
 }
 
 .form {
@@ -16,10 +22,9 @@
   align-items: center;
   justify-content: center;
   width: 450px;
-  height: 450px;
+  height: 550px;
+  border-radius: 20px;
   background-color: rgb(190, 209, 209);
-
-
 }
 
 .fields {
@@ -40,11 +45,13 @@
   color: var(--title-color);
 }
 
+
 .input {
   all: unset;
   width: 350px;
   height: 30px;
   border: 1px solid rgb(124, 124, 124);
+  background-color: rgb(190, 209, 209);
   border-radius: 5px;
   margin-bottom: 5px;
 }
@@ -70,10 +77,82 @@
 
 .react-datepicker__day, .react-datepicker-time__header, .react-datepicker__current-month, .react-datepicker__day-names, .react-datepicker__day-name, .react-datepicker__header, .react-datepicker__header--time, .react-datepicker__time-list-item, .react-datepicker-popper, .react-datepicker__time-container {
   background-color: var(--title-color);
-  /* border-radius: 10px; */
+
 }
 
 .date__picker {
   width: 350px;
   background-color: rgb(190, 209, 209);
+  cursor: pointer;
+  border: 1px solid rgb(124, 124, 124);
+  border-radius: 5px;
+
+}
+
+.react-datepicker-wrapper, .react-datepicker__input-container {
+  border-radius: 5px;
+
+}
+
+.select__services {
+  width: 350px;
+  height: 30px;
+  color: var(--title-color);
+  border-radius: 5px;
+  background-color: rgb(190, 209, 209);
+
+}
+
+.button-submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 250px;
+  color: var(--body-color);
+  font-size: var(--normal-font-size);
+  font-weight: var(--font-medium);
+  margin-top: 1rem;
+}
+
+.icon-calender {
+  background-color: var(--body-color) rgb(190, 209, 209);
+}
+
+
+@media screen and (max-width:768px) {
+  .form {
+    width: 400px;
+    margin-left: var(--mb-1);
+    margin-right: var(--mb-1);
+  }
+
+  .content__scheduling {
+    margin: 0 40px;
+  }
+
+}
+
+@media screen and (max-width: 400px) {
+  .fields {
+    width: 350px;
+  }
+
+  .react-datepicker-wrapper {
+    max-width: 300px;
+  }
+
+  .react-datepicker__input-container, .date__picker {
+    max-width: 300px;
+    height: 30px;
+
+  }
+
+  .fields>input {
+    width: 300px;
+  }
+
+  .select__services {
+    width: 300px;
+  }
+
 }

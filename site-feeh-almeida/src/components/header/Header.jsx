@@ -49,6 +49,13 @@ const Header = () => {
                 Contato
               </a>
             </li>
+
+            <li className="nav__item">
+              <a href="#admin" className="nav__link">
+                <i className="uil uil-message nav__icon"></i>
+                Admin
+              </a>
+            </li>
           </ul>
           <i
             className="uil uil-times nav__close"
