@@ -1,0 +1,291 @@
+.admin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.container__admin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+}
+
+.container__admin>h1 {
+  color: var(--text-color);
+  margin-bottom: 30px;
+}
+
+.div-users {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 600px;
+  height: 200px;
+  padding: 10px;
+  border: 1px solid var(--container-color);
+  border-radius: 20px;
+  margin-bottom: 20px;
+
+}
+
+.div-users>h3 {
+  all: unset;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+.div-users>h3>span {
+  color: var(--title-color);
+}
+
+.container__calendar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 600px;
+  min-height: 100vh;
+  padding: 10px;
+  /* border: 1px solid var(--container-color); */
+  border-radius: 20px;
+  margin-bottom: 20px;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container__calendar>div input {
+  width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.react-datepicker-popper {
+  all: unset;
+  margin-left: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* .react-datepicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 70%;
+  margin-right: auto;
+  text-align: center;
+
+} */
+
+.div-dayselect {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 500px;
+  height: 200px;
+  padding: 10px;
+  border: 1px solid var(--container-color);
+  border-radius: 20px;
+  margin-top: 20px;
+  font-size: smaller;
+}
+
+.div-dayselect>h3 {
+  all: unset;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+.div-dayselect>h3>span {
+  color: var(--title-color);
+}
+
+
+
+
+
+
+@media screen and (max-width:780px) {
+  .admin {
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    width: 80vw;
+    min-height: 100vh;
+    text-align: center;
+    margin-right: 20px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .div-users {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 80vw;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid var(--container-color);
+    border-radius: 20px;
+    margin-bottom: 20px;
+
+  }
+
+  .container__calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80vw;
+    min-height: 100vh;
+    padding: 10px;
+    /* border: 1px solid var(--container-color); */
+    border-radius: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    ;
+  }
+
+
+  .div-dayselect {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 80vw;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid var(--container-color);
+    border-radius: 20px;
+    margin-bottom: 20px;
+
+  }
+
+  .container__calendar>div input {
+    width: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .react-datepicker-popper {
+    all: unset;
+    margin-left: 30px;
+    display: flex;
+
+  }
+}
+
+@media screen and (max-width:450px) {
+  .admin {
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100vw;
+    min-height: 100vh;
+    text-align: center;
+    margin-right: 20px;
+  }
+
+  .div-users {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 350px;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid var(--container-color);
+    border-radius: 20px;
+    margin-bottom: 20px;
+
+  }
+
+  .div-users>h3 {
+    width: 340px;
+    height: 40px;
+
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 5px;
+  }
+
+  .div-users>h3>span {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--title-color);
+  }
+
+  .container__calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 360px;
+    min-height: 100vh;
+    padding: 10px;
+    /* border: 1px solid var(--container-color); */
+    border-radius: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    ;
+  }
+
+
+  .div-dayselect {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 350px;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid var(--container-color);
+    border-radius: 20px;
+    margin-bottom: 20px;
+
+  }
+
+  .div-dayselect>h3 {
+    width: 340px;
+    height: 40px;
+
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 5px;
+  }
+
+  .react-datepicker-popper {
+    all: unset;
+    margin-left: 30px;
+    display: flex;
+
+  }
+}

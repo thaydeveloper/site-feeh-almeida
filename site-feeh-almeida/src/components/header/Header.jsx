@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <header className="header">
       <nav className="nav container">
-        <a href="index.html" className="nav__logo">
+        <a href="/" className="nav__logo">
           Fernanda
         </a>
 
@@ -20,11 +20,11 @@ const Header = () => {
               </a>
             </li>
 
-            <li className="nav__item">
+            {/* <li className="nav__item">
               <a href="#about" className="nav__link">
                 <i className="uil uil-user nav__icon"></i> Sobre
               </a>
-            </li>
+            </li> */}
 
             <li className="nav__item">
               <a href="#gallery" className="nav__link">
@@ -50,8 +50,8 @@ const Header = () => {
               </a>
             </li>
 
-            <li className="nav__item">
-              <a href="#admin" className="nav__link">
+            <li className="nav__item" onClick={() => setAdm(!adm)}>
+              <a href="/login" className="nav__link">
                 <i className="uil uil-message nav__icon"></i>
                 Admin
               </a>

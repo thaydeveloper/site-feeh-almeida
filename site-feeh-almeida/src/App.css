@@ -57,6 +57,10 @@
   background: var(--body-color);
 }
 
+.main {
+  height: 100vh;
+}
+
 html {
   scroll-behavior: smooth;
 }

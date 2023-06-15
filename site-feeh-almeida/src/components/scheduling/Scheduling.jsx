@@ -32,7 +32,7 @@ const validationSchema = yup.object().shape({
 });
 
 const Scheduling = () => {
-  const valueContext = useContext(MyContext);
+  const { tablePrices, handleContextData } = useContext(MyContext);
 
   const [servicesState, setServices] = useState();
 
@@ -72,10 +72,15 @@ const Scheduling = () => {
     setStartTime(time);
   };
 
-  const onSubmit = (date) => {
+  const onSubmit = async (date) => {
     if (!date) return;
     try {
-      const response = api.post("/scheduling", { ...date, id: uniqueId });
+      const response = await api.post("/scheduling", {
+        ...date,
+        id: uniqueId,
+        day: startDate.getDate(),
+      });
+      handleContextData(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -166,7 +171,7 @@ const Scheduling = () => {
               {...register("services")}
               onChange={(event) => setServices(event.target.value)}
             >
-              {valueContext.map((item) => (
+              {tablePrices.map((item) => (
                 <option
                   className="select__services"
                   value={[item.title, item.price]}
