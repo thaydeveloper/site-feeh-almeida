@@ -9,7 +9,7 @@ const Prices = () => {
     <section className="prices section" id="prices">
       <h1 className="title__prices">Preços</h1>
       <div className="content__prices container">
-        {/*  <div className="card__prices" key={price.id}>
+        <div className="card__prices" key={price.id}>
           <span className="span__price"></span>
           <img
             className="image__card"
@@ -20,7 +20,7 @@ const Prices = () => {
 
           <h1 className="title__card">{price.title}</h1>
           <h3>{price.price}</h3>
-        </div> */}
+        </div>
       </div>
     </section>
   );
