@@ -1,16 +1,26 @@
 import React, { useState } from "react";
 import "./header.css";
 import { UilImages, UilBill, UilCalender } from "@iconscout/react-unicons";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const Header = () => {
   const [toggle, setToggle] = useState(false);
+  const navigate = useNavigate();
 
+  const { handleClearToken } = useAuth();
   return (
     <header className="header">
       <nav className="nav container">
         <div className={toggle ? "nav__menu show-menu" : "nav__menu"}>
           <ul className="nav__list">
-            <li className="nav__item">
+            <li
+              className="nav__item"
+              onClick={() => {
+                handleClearToken();
+                navigate("/");
+              }}
+            >
               <a href="/" className="nav__link active-link">
                 <i className="uil uil-home nav__icon"></i> Home
               </a>

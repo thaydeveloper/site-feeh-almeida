@@ -14,6 +14,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import MyContext from "../../contexts/MyContext";
 import { UilCalender } from "@iconscout/react-unicons";
 import { v4 as uuidv4 } from "uuid";
+import { setHours, setMinutes } from "date-fns";
 
 registerLocale("ptBR", ptBR);
 const validationSchema = yup.object().shape({
@@ -33,11 +34,14 @@ const validationSchema = yup.object().shape({
 
 const Scheduling = () => {
   const { tablePrices, handleContextData } = useContext(MyContext);
-
+  const { tableAdditionalServices } = useContext(MyContext);
   const [servicesState, setServices] = useState();
+  const [servicesAdditional, setServicesAdditionals] = useState();
 
   const [startDate, setStartDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
+  /* const [inicialTime, setInicialTime] = useState(new Date().setHours(6, 0)); */
+  const [filterTime, setFilterTime] = useState([]);
 
   const uniqueId = uuidv4();
   const {
@@ -55,6 +59,23 @@ const Scheduling = () => {
   });
 
   const phoneValue = watch("phone");
+  async function getAlluser() {
+    try {
+      const response = await api.get("/users");
+      console.log(response.data);
+
+      if (response.data) {
+        setFilterTime(response.data);
+        handleContextData(response.data);
+      }
+      console.log(filterTime);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const hoursScheduling = filterTime.map((obj) => obj.time);
+  console.log(hoursScheduling);
 
   useEffect(() => {
     setValue("phone", maskPhoneNumber(phoneValue));
@@ -63,6 +84,9 @@ const Scheduling = () => {
       locale: ptBR,
     });
     setValue("services", servicesState);
+    setValue("servicesAdditional", servicesAdditional);
+
+    getAlluser();
   }, [phoneValue, startDate, startTime]);
 
   const handleDateChange = (date) => {
@@ -80,7 +104,6 @@ const Scheduling = () => {
         id: uniqueId,
         day: startDate.getDate(),
       });
-      handleContextData(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -146,8 +169,20 @@ const Scheduling = () => {
                   selected={startTime}
                   onChange={handleTimeChange}
                   showTimeSelect
+                  /* excludeTimes={[
+                    setHours(setMinutes(new Date(), 0), 17),
+                    setHours(setMinutes(new Date(), 30), 18),
+                    setHours(setMinutes(new Date(), 30), 19),
+                    setHours(setMinutes(new Date(), 30), 17),
+                  ]} */
+                  includeTimes={[
+                    setHours(setMinutes(new Date(), 0), 13),
+                    setHours(setMinutes(new Date(), 30), 18),
+                    setHours(setMinutes(new Date(), 30), 19),
+                    setHours(setMinutes(new Date(), 0), 18),
+                  ]}
                   showTimeSelectOnly
-                  timeIntervals={120}
+                  timeIntervals={180}
                   timeFormat="p"
                   timeCaption="Time"
                   dateFormat="HH:mm aa"
@@ -159,7 +194,7 @@ const Scheduling = () => {
 
           <div className="fields" overflow="hidden">
             <label className="fields__label" htmlFor="servicos">
-              serviços *
+              Serviços *
             </label>
 
             <select
@@ -176,6 +211,33 @@ const Scheduling = () => {
                   className="select__services"
                   value={[item.title, item.price]}
                   key={item.title}
+                >
+                  {item.title}
+                  {item.price}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="fields" overflow="hidden">
+            <label className="fields__label" htmlFor="servicos">
+              Serviços Adicionais
+            </label>
+
+            <select
+              overflow="hidden"
+              className="select__services"
+              label="servicos"
+              name="servicos"
+              value={servicesAdditional}
+              {...register("servicesAdditional")}
+              onChange={(event) => setServicesAdditionals(event.target.value)}
+            >
+              {tableAdditionalServices.map((item) => (
+                <option
+                  className="select__services"
+                  value={[item.title, item.price]}
+                  key={item.id}
                 >
                   {item.title}
                   {item.price}

@@ -6,7 +6,7 @@ function useAuth() {
     localStorage.removeItem("token");
   }
   function handleGetToken() {
-    localStorage.getItem("token");
+    return localStorage.getItem("token");
   }
   return {
     handleAddToken,

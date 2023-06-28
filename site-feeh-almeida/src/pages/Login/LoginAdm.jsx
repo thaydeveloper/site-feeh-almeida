@@ -41,14 +41,23 @@ const LoginAdm = () => {
       const response = await api.post("/adm", {
         ...data,
       });
-      console.log(response.data);
 
       handleAddToken(response.data);
       navigate("/admin");
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
+  useEffect(() => {
+    const token = handleGetToken();
+    if (token) {
+      navigate("/admin");
+      return;
+    }
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+  }, []);
 
   return (
     <section className="section login-adm">

@@ -1,10 +1,8 @@
-import alongamentodefibra from "../assets/alongamentodefibra.jpg";
 export const tablePrices = [
   {
     title: "Alongamento Fibra Encapsulada",
     id: 1,
     price: " R$ 135,00",
-    image: alongamentodefibra,
   },
   {
     title: "Alongamento Fibra Comum",
@@ -21,11 +19,7 @@ export const tablePrices = [
     id: 4,
     price: " R$ 35,00",
   },
-  {
-    title: "Unha Comum",
-    id: 5,
-    price: " R$ 25,00",
-  },
+
   {
     title: "Manutenção Banho De Gel",
     id: 6,
@@ -53,4 +47,25 @@ export const tablePrices = [
   },
 ];
 
-export const tableMaintenance = [];
+export const tableAdditionalServices = [
+  {
+    title: "Pé",
+    id: 1,
+    price: " R$ 26,00",
+  },
+  {
+    title: "Esmaltação Em Gel",
+    id: 2,
+    price: " R$ 35,00",
+  },
+  {
+    title: "Decoração à partir",
+    id: 3,
+    price: " R$ 20,00",
+  },
+  {
+    title: "Mão Comum ",
+    id: 4,
+    price: " R$ 24,00",
+  },
+];

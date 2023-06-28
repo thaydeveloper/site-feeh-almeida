@@ -13,8 +13,11 @@ import LoginAdm from "./pages/Login/LoginAdm";
 
 export function Router() {
   const { handleGetToken } = useAuth();
-  const protectedRoutes = (redirectTo) => {
-    return handleGetToken() ? <Outlet /> : <Navigate to={redirectTo} />;
+
+  const ProtectedRoutes = ({ redirectTo }) => {
+    let authToken = handleGetToken();
+
+    return authToken ? <Outlet /> : <Navigate to={redirectTo} />;
   };
 
   return (
@@ -40,16 +43,17 @@ export function Router() {
           </>
         }
       />
-      <Route
-        path="/admin"
-        element={
-          <>
-            <HeaderAdm />
-            <Admin />
-          </>
-        }
-      />
-      <Route element={protectedRoutes({ redirectTo: "/" })}></Route>
+      <Route element={<ProtectedRoutes redirectTo={"/"} />}>
+        <Route
+          path="/admin"
+          element={
+            <>
+              <HeaderAdm />
+              <Admin />
+            </>
+          }
+        />
+      </Route>
     </Routes>
   );
 }

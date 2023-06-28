@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 
-import { tablePrices } from "./services/prices";
+import { tablePrices, tableAdditionalServices } from "./services/prices";
 import MyContext from "./contexts/MyContext";
 import { Router } from "./Routes";
 import { BrowserRouter } from "react-router-dom";
@@ -14,7 +14,9 @@ function Main() {
   };
 
   return (
-    <MyContext.Provider value={{ tablePrices, data, handleContextData }}>
+    <MyContext.Provider
+      value={{ tablePrices, tableAdditionalServices, data, handleContextData }}
+    >
       <BrowserRouter>
         <Router />
       </BrowserRouter>

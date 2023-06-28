@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import "./prices.css";
-import { tableMaintenance } from "../../services/prices";
 
 import images from "../../services/bestImages";
 
