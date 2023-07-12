@@ -33,16 +33,15 @@ const validationSchema = yup.object().shape({
 });
 
 const Scheduling = () => {
-  const { tablePrices, handleContextData } = useContext(MyContext);
-  const { tableAdditionalServices } = useContext(MyContext);
+  const { tablePrices, data, tableAdditionalServices } = useContext(MyContext);
+
   const [servicesState, setServices] = useState();
   const [servicesAdditional, setServicesAdditionals] = useState();
 
   const [startDate, setStartDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
-  /* const [inicialTime, setInicialTime] = useState(new Date().setHours(6, 0)); */
-  const [filterTime, setFilterTime] = useState([]);
 
+  const [allUsers, setAllUsers] = useState([]);
   const uniqueId = uuidv4();
   const {
     control,
@@ -59,23 +58,11 @@ const Scheduling = () => {
   });
 
   const phoneValue = watch("phone");
-  async function getAlluser() {
-    try {
-      const response = await api.get("/users");
-      console.log(response.data);
 
-      if (response.data) {
-        setFilterTime(response.data);
-        handleContextData(response.data);
-      }
-      console.log(filterTime);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  let dateSelect = startDate.getDate();
+  let daySelect = allUsers.filter((item) => item.day === dateSelect);
 
-  const hoursScheduling = filterTime.map((obj) => obj.time);
-  console.log(hoursScheduling);
+  const hoursScheduling = daySelect.map((obj) => obj.time);
 
   useEffect(() => {
     setValue("phone", maskPhoneNumber(phoneValue));
@@ -85,8 +72,7 @@ const Scheduling = () => {
     });
     setValue("services", servicesState);
     setValue("servicesAdditional", servicesAdditional);
-
-    getAlluser();
+    setAllUsers(data);
   }, [phoneValue, startDate, startTime]);
 
   const handleDateChange = (date) => {
@@ -169,18 +155,15 @@ const Scheduling = () => {
                   selected={startTime}
                   onChange={handleTimeChange}
                   showTimeSelect
-                  /* excludeTimes={[
-                    setHours(setMinutes(new Date(), 0), 17),
-                    setHours(setMinutes(new Date(), 30), 18),
-                    setHours(setMinutes(new Date(), 30), 19),
-                    setHours(setMinutes(new Date(), 30), 17),
-                  ]} */
-                  includeTimes={[
+                  excludeTimes={hoursScheduling.map((hours) =>
+                    setHours(setMinutes(new Date(), 0), hours)
+                  )}
+                  /* includeTimes={[
                     setHours(setMinutes(new Date(), 0), 13),
                     setHours(setMinutes(new Date(), 30), 18),
                     setHours(setMinutes(new Date(), 30), 19),
                     setHours(setMinutes(new Date(), 0), 18),
-                  ]}
+                  ]} */
                   showTimeSelectOnly
                   timeIntervals={180}
                   timeFormat="p"

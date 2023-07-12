@@ -7,9 +7,6 @@ import { motion } from "framer-motion";
 const Prices = () => {
   return (
     <section className="prices section" id="prices">
-      <>
-        <Motion />
-      </>
       <h1 className="title__prices">Preços</h1>
       <div className="content__prices container">
         {/* <div className="card__prices" key={price.id}>

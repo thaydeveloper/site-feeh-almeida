@@ -12,23 +12,14 @@ import DatePicker, { registerLocale } from "react-datepicker";
 const Adm = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [filterUser, setFilterUser] = useState([]);
-  const [get, setGet] = useState(false);
+  const [get, setGet] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
+  const { data } = useContext(MyContext);
 
-  const getUser = async () => {
-    try {
-      const response = await api.get(`http://localhost:3000/users`);
-      const { data } = response;
+  const currentDate = new Date().getDate();
+  const dateFilter = data.filter((item) => item.day === currentDate);
 
-      setAllUsers(data);
-
-      const currentDate = new Date().getDate();
-      const dateFilter = data.filter((item) => item.day === currentDate);
-      setFilterUser(dateFilter);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  /* setFilterUser(dateFilter); */
 
   const {
     control,
@@ -42,19 +33,17 @@ const Adm = () => {
       date: startDate,
     },
   });
+  let daySelect = startDate.getDate();
+  let days = allUsers.filter((item) => item.day === daySelect);
   const handleDateChange = (date) => {
     setStartDate(date);
   };
 
   useEffect(() => {
     setValue("date", format(startDate, "PPPP", { locale: ptBR }));
-    getUser();
+    setFilterUser(dateFilter);
+    setAllUsers(data);
   }, [startDate]);
-
-  let daySelect = startDate.getDate();
-  let days = allUsers.filter((item) => item.day === daySelect);
-
-  console.log(days);
 
   return (
     <section className="section admin" id="admin">
