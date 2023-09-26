@@ -6,6 +6,7 @@
   width: 100vw;
   min-height: 100vh;
   text-align: center;
+
 }
 
 .container__admin {
@@ -27,7 +28,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   width: 600px;
-  height: 200px;
+  height: 250px;
   padding: 10px;
   border: 1px solid var(--container-color);
   border-radius: 20px;

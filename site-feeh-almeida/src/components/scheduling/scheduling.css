@@ -22,7 +22,7 @@
   align-items: center;
   justify-content: center;
   width: 450px;
-  height: 550px;
+  height: 750px;
   border-radius: 20px;
   background-color: rgb(190, 209, 209);
 }
@@ -76,7 +76,10 @@
 }
 
 .react-datepicker__day, .react-datepicker-time__header, .react-datepicker__current-month, .react-datepicker__day-names, .react-datepicker__day-name, .react-datepicker__header, .react-datepicker__header--time, .react-datepicker__time-list-item, .react-datepicker-popper, .react-datepicker__time-container {
-  background-color: var(--title-color);
+  background: #ffffff10;
+  border: 2px solid #ffffff30;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
 
 }
 

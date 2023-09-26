@@ -8,13 +8,15 @@ import api from "../../services/api";
 import { useEffect, useState, useContext } from "react";
 import { maskPhoneNumber } from "../../utils/mask";
 import DatePicker, { registerLocale } from "react-datepicker";
-import { format } from "date-fns";
+import { format, getHours, setMilliseconds, setSeconds } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 import "react-datepicker/dist/react-datepicker.css";
 import MyContext from "../../contexts/MyContext";
 import { UilCalender } from "@iconscout/react-unicons";
 import { v4 as uuidv4 } from "uuid";
 import { setHours, setMinutes } from "date-fns";
+import { useNavigate } from "react-router-dom";
+import { showSuccessNotification } from "../Toats";
 
 registerLocale("ptBR", ptBR);
 const validationSchema = yup.object().shape({
@@ -40,6 +42,7 @@ const Scheduling = () => {
 
   const [startDate, setStartDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
+  let navigate = useNavigate();
 
   const [allUsers, setAllUsers] = useState([]);
   const uniqueId = uuidv4();
@@ -62,7 +65,18 @@ const Scheduling = () => {
   let dateSelect = startDate.getDate();
   let daySelect = allUsers.filter((item) => item.day === dateSelect);
 
-  const hoursScheduling = daySelect.map((obj) => obj.time);
+  const hoursScheduling = daySelect.map((obj) => {
+    const timeParts = obj.time.split(":");
+
+    if (timeParts.length === 2) {
+      const hours = parseInt(timeParts[0], 10);
+      const minutes = parseInt(timeParts[1], 10);
+
+      return { hours, minutes };
+    }
+
+    return 0;
+  });
 
   useEffect(() => {
     setValue("phone", maskPhoneNumber(phoneValue));
@@ -82,18 +96,52 @@ const Scheduling = () => {
     setStartTime(time);
   };
 
-  const onSubmit = async (date) => {
-    if (!date) return;
+  const onSubmit = async (data) => {
+    if (!data) return;
+    const selectedTime = format(startTime, "HH:mm", { locale: ptBR });
+    data.time = selectedTime;
+
     try {
       const response = await api.post("/scheduling", {
-        ...date,
+        ...data,
         id: uniqueId,
         day: startDate.getDate(),
       });
+
+      if (response.status === 200) {
+        showSuccessNotification("Agendamento feito com sucesso!");
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 1000);
+      }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const getAvailableTimes = () => {
+    const startTime = setMinutes(
+      setSeconds(setMilliseconds(setHours(new Date(), 8), 0), 0),
+      0
+    );
+    const endTime = setMinutes(
+      setSeconds(setMilliseconds(setHours(new Date(), 18), 0), 0),
+      0
+    );
+    const interval = 2.5 * 60 * 60 * 1000;
+
+    const availableTimes = [];
+
+    let currentTime = startTime;
+    while (currentTime <= endTime) {
+      availableTimes.push(new Date(currentTime));
+      currentTime = new Date(currentTime.getTime() + interval);
+    }
+
+    return availableTimes;
+  };
+
+  const availableTimes = getAvailableTimes();
 
   return (
     <section className="scheduling section" id="scheduling">
@@ -155,17 +203,14 @@ const Scheduling = () => {
                   selected={startTime}
                   onChange={handleTimeChange}
                   showTimeSelect
-                  excludeTimes={hoursScheduling.map((hours) =>
-                    setHours(setMinutes(new Date(), 0), hours)
-                  )}
-                  /* includeTimes={[
-                    setHours(setMinutes(new Date(), 0), 13),
-                    setHours(setMinutes(new Date(), 30), 18),
-                    setHours(setMinutes(new Date(), 30), 19),
-                    setHours(setMinutes(new Date(), 0), 18),
-                  ]} */
+                  excludeTimes={hoursScheduling.map((time) => {
+                    return setHours(
+                      setMinutes(new Date(), time.minutes),
+                      time.hours
+                    );
+                  })}
+                  includeTimes={availableTimes}
                   showTimeSelectOnly
-                  timeIntervals={180}
                   timeFormat="p"
                   timeCaption="Time"
                   dateFormat="HH:mm aa"

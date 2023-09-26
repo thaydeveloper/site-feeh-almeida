@@ -38,6 +38,7 @@ const Adm = () => {
   const handleDateChange = (date) => {
     setStartDate(date);
   };
+  console.log(allUsers);
 
   useEffect(() => {
     setValue("date", format(startDate, "PPPP", { locale: ptBR }));
@@ -62,6 +63,9 @@ const Adm = () => {
             </h3>
             <h3>
               <span>Serviço:</span> {user.services}
+            </h3>
+            <h3>
+              <span>Serviço Adicional:</span> {user.servicesAdditional}
             </h3>
             <h3>
               <span>horario:</span> {user.time}H
@@ -100,6 +104,9 @@ const Adm = () => {
             </h3>
             <h3>
               <span>Serviço:</span> {user.services}
+            </h3>
+            <h3>
+              <span>Serviço Adicional:</span> {user.servicesAdditional}
             </h3>
             <h3>
               <span>horario:</span> {user.time}H
