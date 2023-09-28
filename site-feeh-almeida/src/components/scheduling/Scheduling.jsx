@@ -131,7 +131,7 @@ const Scheduling = () => {
         id: uniqueId,
         day: startDate.getDate(),
       });
-      console.log(response);
+
       if (response.status === 200) {
         showSuccessNotification("Agendamento feito com sucesso!");
         setTimeout(() => {
