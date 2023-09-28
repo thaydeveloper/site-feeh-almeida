@@ -78,6 +78,30 @@ const Scheduling = () => {
     return 0;
   });
 
+  const getAvailableTimes = () => {
+    const startTime = setMinutes(
+      setSeconds(setMilliseconds(setHours(new Date(), 8), 0), 0),
+      0
+    );
+    const endTime = setMinutes(
+      setSeconds(setMilliseconds(setHours(new Date(), 18), 0), 0),
+      0
+    );
+    const interval = 2.5 * 60 * 60 * 1000;
+
+    const availableTimes = [];
+
+    let currentTime = startTime;
+    while (currentTime <= endTime) {
+      availableTimes.push(new Date(currentTime));
+      currentTime = new Date(currentTime.getTime() + interval);
+    }
+
+    return availableTimes;
+  };
+
+  const availableTimes = getAvailableTimes();
+
   useEffect(() => {
     setValue("phone", maskPhoneNumber(phoneValue));
     setValue("date", format(startDate, "PPPP", { locale: ptBR }));
@@ -118,30 +142,6 @@ const Scheduling = () => {
       console.log(error);
     }
   };
-
-  const getAvailableTimes = () => {
-    const startTime = setMinutes(
-      setSeconds(setMilliseconds(setHours(new Date(), 8), 0), 0),
-      0
-    );
-    const endTime = setMinutes(
-      setSeconds(setMilliseconds(setHours(new Date(), 18), 0), 0),
-      0
-    );
-    const interval = 2.5 * 60 * 60 * 1000;
-
-    const availableTimes = [];
-
-    let currentTime = startTime;
-    while (currentTime <= endTime) {
-      availableTimes.push(new Date(currentTime));
-      currentTime = new Date(currentTime.getTime() + interval);
-    }
-
-    return availableTimes;
-  };
-
-  const availableTimes = getAvailableTimes();
 
   return (
     <section className="scheduling section" id="scheduling">
@@ -188,6 +188,7 @@ const Scheduling = () => {
                     onChange={handleDateChange}
                     dateFormat="dd/MM/yyyy"
                     locale="ptBR"
+                    calendarClassName="calender"
                   />
                 )}
               />
@@ -215,9 +216,11 @@ const Scheduling = () => {
                   timeCaption="Time"
                   dateFormat="HH:mm aa"
                   locale="ptBR"
+                  /* timeClassName={handleColoer} */
                 />
               )}
             />
+            <span className="spanError error">{errors?.time?.message}</span>
           </div>
 
           <div className="fields" overflow="hidden">
