@@ -138,7 +138,9 @@ const Scheduling = () => {
           window.location.href = "/";
         }, 1000);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
