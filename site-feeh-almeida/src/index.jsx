@@ -14,7 +14,7 @@ function Main() {
   const getAlluser = useCallback(async () => {
     try {
       const response = await api.get("/users");
-      console.log(response.data);
+
       if (!response) return;
       setContextData(response.data);
     } catch (error) {

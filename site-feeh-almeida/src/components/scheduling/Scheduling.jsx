@@ -71,36 +71,68 @@ const Scheduling = () => {
     if (timeParts.length === 2) {
       const hours = parseInt(timeParts[0], 10);
       const minutes = parseInt(timeParts[1], 10);
-
+      console.log(hours);
       return { hours, minutes };
     }
 
     return 0;
   });
 
-  const getAvailableTimes = () => {
-    const startTime = setMinutes(
-      setSeconds(setMilliseconds(setHours(new Date(), 8), 0), 0),
-      0
-    );
-    const endTime = setMinutes(
-      setSeconds(setMilliseconds(setHours(new Date(), 18), 0), 0),
-      0
-    );
-    const interval = 2.5 * 60 * 60 * 1000;
+  console.log(daySelect);
+  const duranceTotal = daySelect.reduce((acc, item) => {
+    const totalDurance = item.durance.reduce((total, val) => {
+      const parsedValue = parseFloat(val) || 0;
+      return total + parsedValue;
+    }, 0);
+
+    return item.durance.length > 1 ? totalDurance : item.durance[0] || 0;
+  }, 0);
+
+  /* let duranceTotal = 0;
+  daySelect.forEach((item) => {
+    duranceTotal += item.durance.reduce((acc, val) => acc + parseFloat(val), 0);
+  }); */
+
+  const calculateAvailableTimes = () => {
+    const busyTimes = daySelect.map((item) => {
+      const timeParts = item.time.split(":");
+      const hours = parseInt(timeParts[0], 10);
+      const minutes = parseInt(timeParts[1], 10);
+      return setMinutes(
+        setSeconds(setMilliseconds(setHours(new Date(), hours), minutes), 0),
+        0
+      );
+    });
 
     const availableTimes = [];
 
-    let currentTime = startTime;
-    while (currentTime <= endTime) {
-      availableTimes.push(new Date(currentTime));
-      currentTime = new Date(currentTime.getTime() + interval);
+    let currentTime = setHours(setMinutes(new Date(), 0), 8);
+
+    while (currentTime <= setHours(setMinutes(new Date(), 0), 18)) {
+      const endTime = new Date(
+        currentTime.getTime() + duranceTotal * 60 * 60 * 1000
+      );
+
+      let isAvailable = true;
+
+      for (const busyTime of busyTimes) {
+        if (busyTime >= currentTime && busyTime < endTime) {
+          isAvailable = false;
+          break;
+        }
+      }
+
+      if (isAvailable) {
+        availableTimes.push(new Date(currentTime));
+      }
+
+      currentTime = new Date(currentTime.getTime() + 30 * 60 * 1000); // Incremento de 30 minutos
     }
 
     return availableTimes;
   };
 
-  const availableTimes = getAvailableTimes();
+  const availableTimes = calculateAvailableTimes();
 
   useEffect(() => {
     setValue("phone", maskPhoneNumber(phoneValue));
@@ -121,15 +153,30 @@ const Scheduling = () => {
   };
 
   const onSubmit = async (data) => {
-    if (!data) return;
+    console.log(data);
+
+    /* if (!data) return; */
+
     const selectedTime = format(startTime, "HH:mm", { locale: ptBR });
     data.time = selectedTime;
+    const [title, price, decimal, duranceServices] = data.services.split(",");
+    if (!data.servicesAdditional) {
+      data.servicesAdditional = "";
+    }
+
+    const [
+      titleAdditional,
+      priceAdditional,
+      decimalAdditional,
+      duranceAdditional,
+    ] = data.servicesAdditional.split(",");
 
     try {
       const response = await api.post("/scheduling", {
         ...data,
         id: uniqueId,
         day: startDate.getDate(),
+        durance: [duranceServices, duranceAdditional],
       });
 
       if (response.status === 200) {
@@ -210,7 +257,12 @@ const Scheduling = () => {
                       time.hours
                     );
                   })}
-                  includeTimes={availableTimes}
+                  includeTimes={availableTimes.map((time) => {
+                    return setHours(
+                      setMinutes(new Date(), time.getMinutes()),
+                      time.getHours()
+                    );
+                  })}
                   showTimeSelectOnly
                   timeFormat="p"
                   timeCaption="Time"
@@ -240,7 +292,7 @@ const Scheduling = () => {
               {tablePrices.map((item) => (
                 <option
                   className="select__services"
-                  value={[item.title, item.price]}
+                  value={[item.title, item.price, item.durance]}
                   key={item.title}
                 >
                   {item.title}
@@ -267,7 +319,7 @@ const Scheduling = () => {
               {tableAdditionalServices.map((item) => (
                 <option
                   className="select__services"
-                  value={[item.title, item.price]}
+                  value={[item.title, item.price, item.durance]}
                   key={item.id}
                 >
                   {item.title}

@@ -107,3 +107,49 @@ export const tableAdditionalServices = [
     durance: 0.4,
   },
 ];
+
+/*   let duranceTotal = 0;
+  daySelect.forEach((item) => {
+    duranceTotal += item.durance.reduce((acc, val) => acc + parseFloat(val), 0);
+  });
+
+  const calculateAvailableTimes = () => {
+    const busyTimes = daySelect.map((item) => {
+      const timeParts = item.time.split(":");
+      const hours = parseInt(timeParts[0], 10);
+      const minutes = parseInt(timeParts[1], 10);
+      return setMinutes(
+        setSeconds(setMilliseconds(setHours(new Date(), hours), minutes), 0),
+        0
+      );
+    });
+
+    const availableTimes = [];
+
+    let currentTime = setHours(setMinutes(new Date(), 0), 8);
+
+    while (currentTime <= setHours(setMinutes(new Date(), 0), 18)) {
+      const endTime = new Date(
+        currentTime.getTime() + duranceTotal * 60 * 60 * 1000
+      );
+
+      let isAvailable = true;
+
+      for (const busyTime of busyTimes) {
+        if (busyTime >= currentTime && busyTime < endTime) {
+          isAvailable = false;
+          break;
+        }
+      }
+
+      if (isAvailable) {
+        availableTimes.push(new Date(currentTime));
+      }
+
+      currentTime = new Date(currentTime.getTime() + 30 * 60 * 1000); // Incremento de 30 minutos
+    }
+
+    return availableTimes;
+  };
+
+  const availableTimes = calculateAvailableTimes(); */
