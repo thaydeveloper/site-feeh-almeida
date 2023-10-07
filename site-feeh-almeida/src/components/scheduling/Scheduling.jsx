@@ -8,13 +8,22 @@ import api from "../../services/api";
 import { useEffect, useState, useContext } from "react";
 import { maskPhoneNumber } from "../../utils/mask";
 import DatePicker, { registerLocale } from "react-datepicker";
-import { format, getHours, setMilliseconds, setSeconds } from "date-fns";
+import {
+  format,
+  getHours,
+  setMilliseconds,
+  setSeconds,
+  setHours,
+  setMinutes,
+  addMinutes,
+} from "date-fns";
+
 import ptBR from "date-fns/locale/pt-BR";
 import "react-datepicker/dist/react-datepicker.css";
 import MyContext from "../../contexts/MyContext";
 import { UilCalender } from "@iconscout/react-unicons";
 import { v4 as uuidv4 } from "uuid";
-import { setHours, setMinutes } from "date-fns";
+
 import { useNavigate } from "react-router-dom";
 import { showSuccessNotification } from "../Toats";
 
@@ -38,6 +47,7 @@ const Scheduling = () => {
   const { tablePrices, data, tableAdditionalServices } = useContext(MyContext);
 
   const [servicesState, setServices] = useState();
+
   const [servicesAdditional, setServicesAdditionals] = useState();
 
   const [startDate, setStartDate] = useState(new Date());
@@ -79,59 +89,86 @@ const Scheduling = () => {
   });
 
   console.log(daySelect);
-  const duranceTotal = daySelect.reduce((acc, item) => {
-    const totalDurance = item.durance.reduce((total, val) => {
-      const parsedValue = parseFloat(val) || 0;
-      return total + parsedValue;
-    }, 0);
 
-    return item.durance.length > 1 ? totalDurance : item.durance[0] || 0;
-  }, 0);
+  const calculateTotalDuration = (item) => {
+    const totalDurance = item.durance
+      .filter((duration) => duration !== null)
+      .map((d) => parseFloat(d))
+      .filter((d) => !isNaN(d));
 
-  /* let duranceTotal = 0;
-  daySelect.forEach((item) => {
-    duranceTotal += item.durance.reduce((acc, val) => acc + parseFloat(val), 0);
-  }); */
+    return totalDurance.length > 0 ? Math.max(...totalDurance) : 0;
+  };
+
+  const calculateBusyTimesBeforeAppointment = (selectedTime) => {
+    const busyTimesBeforeAppointment = daySelect
+      .filter((item) => item.time < selectedTime)
+      .map((item) => {
+        const totalDurance = calculateTotalDuration(item);
+
+        const [hours, minutes] = item.time.split(":");
+        const startTime = setHours(
+          setMinutes(new Date(), minutes),
+          parseInt(hours, 10)
+        );
+        const endTime = addMinutes(startTime, totalDurance);
+
+        return endTime;
+      });
+
+    return busyTimesBeforeAppointment;
+  };
 
   const calculateAvailableTimes = () => {
-    const busyTimes = daySelect.map((item) => {
-      const timeParts = item.time.split(":");
-      const hours = parseInt(timeParts[0], 10);
-      const minutes = parseInt(timeParts[1], 10);
-      return setMinutes(
-        setSeconds(setMilliseconds(setHours(new Date(), hours), minutes), 0),
-        0
-      );
-    });
+    // Calcule duranceTotal dentro da função
+    const duranceTotal = daySelect.reduce((acc, item) => {
+      const totalDurance = item.durance
+        .filter((duration) => duration !== null)
+        .map((d) => parseFloat(d))
+        .filter((d) => !isNaN(d));
 
+      const maxDurance =
+        totalDurance.length > 0 ? Math.max(...totalDurance) : 0;
+
+      return acc + maxDurance;
+    }, 0);
+
+    const selectedTime = format(startTime, "HH:mm");
+    const busyTimesBeforeAppointment =
+      calculateBusyTimesBeforeAppointment(selectedTime);
     const availableTimes = [];
+    const workingStart = setHours(setMinutes(new Date(), 0), 8);
+    const workingEnd = setHours(setMinutes(new Date(), 0), 18);
 
-    let currentTime = setHours(setMinutes(new Date(), 0), 8);
+    let currentTime = workingStart;
 
-    while (currentTime <= setHours(setMinutes(new Date(), 0), 18)) {
-      const endTime = new Date(
-        currentTime.getTime() + duranceTotal * 60 * 60 * 1000
+    while (currentTime <= workingEnd) {
+      const endTime = addMinutes(currentTime, duranceTotal);
+
+      const isAvailable = busyTimesBeforeAppointment.every(
+        (busyTime) => busyTime < currentTime || busyTime >= endTime
       );
-
-      let isAvailable = true;
-
-      for (const busyTime of busyTimes) {
-        if (busyTime >= currentTime && busyTime < endTime) {
-          isAvailable = false;
-          break;
-        }
-      }
 
       if (isAvailable) {
         availableTimes.push(new Date(currentTime));
       }
 
-      currentTime = new Date(currentTime.getTime() + 30 * 60 * 1000); // Incremento de 30 minutos
+      const duranceOfCurrentService = daySelect
+        .filter((item) => format(currentTime, "HH:mm") === item.time)
+        .map((item) => item.durance || ["30"]);
+
+      const validDurance = duranceOfCurrentService
+        .flat()
+        .map((d) => parseFloat(d))
+        .filter((d) => !isNaN(d));
+
+      const totalDurance =
+        validDurance.length > 0 ? Math.max(...validDurance) : 30;
+
+      currentTime = addMinutes(currentTime, totalDurance);
     }
 
     return availableTimes;
   };
-
   const availableTimes = calculateAvailableTimes();
 
   useEffect(() => {
@@ -143,6 +180,7 @@ const Scheduling = () => {
     setValue("services", servicesState);
     setValue("servicesAdditional", servicesAdditional);
     setAllUsers(data);
+    const availableTimes = calculateAvailableTimes();
   }, [phoneValue, startDate, startTime]);
 
   const handleDateChange = (date) => {
@@ -263,6 +301,13 @@ const Scheduling = () => {
                       time.getHours()
                     );
                   })}
+                  /* timeIntervals={availableTimes.map((time) => {
+                    console.log(time);
+                    return setHours(
+                      setMinutes(new Date(), time.getMinutes()),
+                      time.getHours()
+                    );
+                  })} */
                   showTimeSelectOnly
                   timeFormat="p"
                   timeCaption="Time"
