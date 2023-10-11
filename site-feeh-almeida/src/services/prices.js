@@ -86,7 +86,7 @@ export const tableAdditionalServices = [
     title: "Pé",
     id: 1,
     price: " R$ 26,00",
-    durance: 180,
+    durance: 150,
   },
   {
     title: "Esmaltação Em Gel",
@@ -98,7 +98,7 @@ export const tableAdditionalServices = [
     title: "Decoração à partir",
     id: 3,
     price: " R$ 20,00",
-    durance: 60,
+    durance: 40,
   },
   {
     title: "Mão Comum ",
@@ -108,83 +108,71 @@ export const tableAdditionalServices = [
   },
 ];
 
-/* const duranceTotal = daySelect.reduce((acc, item) => {
-    const totalDurance = item.durance
+/*   const calculateTotalDuration = (item) => {
+    const totalDuration = item.durance
       .filter((duration) => duration !== null)
       .map((d) => parseFloat(d))
       .filter((d) => !isNaN(d));
 
-    const maxDurance = totalDurance.length > 0 ? Math.max(...totalDurance) : 0;
-
-    return acc + maxDurance;
-  }, 0);
-
-  console.log(duranceTotal);
-
-  const calculateBusyTimesBeforeAppointment = (selectedTime) => {
-    const busyTimesBeforeAppointment = daySelect
-      .filter((item) => item.time < selectedTime)
-      .map((item) => {
-        const totalDurance = item.durance
-          .filter((duration) => duration !== null)
-          .reduce((acc, val) => acc + parseFloat(val), 0);
-
-        const timeParts = item.time.split(":");
-        const hours = parseInt(timeParts[0], 10);
-        const minutes = parseInt(timeParts[1], 10);
-
-        return setHours(setMinutes(new Date(), minutes), hours + totalDurance);
-      });
-
-    return busyTimesBeforeAppointment;
+    return totalDuration.length > 0
+      ? totalDuration.reduce((acc, val) => acc + val, 0)
+      : 0;
   };
 
   const calculateAvailableTimes = () => {
+    const duranceTotal = daySelect.reduce((acc, item) => {
+      const maxDuration = calculateTotalDuration(item);
+      return acc + maxDuration;
+    }, 0);
+
     const selectedTime = format(startTime, "HH:mm");
 
-    const busyTimesBeforeAppointment =
-      calculateBusyTimesBeforeAppointment(selectedTime);
+    const busyTimesBeforeAppointment = daySelect
+      .filter((item) => item.time < selectedTime)
+      .map((item) => {
+        const totalDuration = item.durance
+          .filter((d) => d !== null)
+          .map((d) => parseFloat(d))
+          .filter((d) => !isNaN(d))
+          .reduce((acc, val) => acc + val, 0);
+
+        const [hours, minutes] = item.time.split(":");
+        const startTime = setHours(
+          setMinutes(new Date(), minutes),
+          parseInt(hours, 10)
+        );
+        const endTime = addMinutes(startTime, totalDuration);
+        return endTime;
+      });
 
     const availableTimes = [];
     const workingStart = setHours(setMinutes(new Date(), 0), 8);
     const workingEnd = setHours(setMinutes(new Date(), 0), 18);
-
     let currentTime = workingStart;
 
     while (currentTime <= workingEnd) {
-      const endTime = new Date(
-        currentTime.getTime() + duranceTotal * 60 * 1000
+      const endTime = addMinutes(currentTime, duranceTotal);
+
+      const isAvailable = busyTimesBeforeAppointment.every(
+        (busyTime) => busyTime < currentTime || busyTime >= endTime
       );
-
-      let isAvailable = true;
-
-      // Verificar se o horário está ocupado antes do agendamento
-      for (const busyTime of busyTimesBeforeAppointment) {
-        if (busyTime >= currentTime && busyTime < endTime) {
-          isAvailable = false;
-          break;
-        }
-      }
 
       if (isAvailable) {
         availableTimes.push(new Date(currentTime));
       }
 
-      // Aqui é a modificação para usar a duração dinâmica de cada serviço
       const duranceOfCurrentService = daySelect
         .filter((item) => format(currentTime, "HH:mm") === item.time)
-        .map((item) => item.durance || ["30"]);
-
-      // Modificação para tratar valores nulos ou vazios
-      const validDurance = duranceOfCurrentService
+        .map((item) => item.durance || ["30"])
         .flat()
         .map((d) => parseFloat(d))
         .filter((d) => !isNaN(d));
 
       const totalDurance =
-        validDurance.length > 0 ? Math.max(...validDurance) : 30;
-
-      currentTime = new Date(currentTime.getTime() + totalDurance * 60 * 1000);
+        duranceOfCurrentService.length > 0
+          ? Math.max(...duranceOfCurrentService)
+          : 30;
+      currentTime = addMinutes(currentTime, totalDurance);
     }
 
     return availableTimes;

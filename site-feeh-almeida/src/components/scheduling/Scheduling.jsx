@@ -91,58 +91,47 @@ const Scheduling = () => {
   console.log(daySelect);
 
   const calculateTotalDuration = (item) => {
-    const totalDurance = item.durance
+    const totalDuration = item.durance
       .filter((duration) => duration !== null)
       .map((d) => parseFloat(d))
       .filter((d) => !isNaN(d));
 
-    return totalDurance.length > 0 ? Math.max(...totalDurance) : 0;
+    return totalDuration.length > 0
+      ? totalDuration.reduce((acc, val) => acc + val, 0)
+      : 0;
   };
 
-  const calculateBusyTimesBeforeAppointment = (selectedTime) => {
+  const calculateAvailableTimes = () => {
+    const selectedTime = format(startTime, "HH:mm");
+
     const busyTimesBeforeAppointment = daySelect
       .filter((item) => item.time < selectedTime)
       .map((item) => {
-        const totalDurance = calculateTotalDuration(item);
-
+        const totalDuration = calculateTotalDuration(item);
         const [hours, minutes] = item.time.split(":");
         const startTime = setHours(
           setMinutes(new Date(), minutes),
           parseInt(hours, 10)
         );
-        const endTime = addMinutes(startTime, totalDurance);
-
+        const endTime = addMinutes(startTime, totalDuration);
         return endTime;
       });
 
-    return busyTimesBeforeAppointment;
-  };
-
-  const calculateAvailableTimes = () => {
-    // Calcule duranceTotal dentro da função
-    const duranceTotal = daySelect.reduce((acc, item) => {
-      const totalDurance = item.durance
-        .filter((duration) => duration !== null)
-        .map((d) => parseFloat(d))
-        .filter((d) => !isNaN(d));
-
-      const maxDurance =
-        totalDurance.length > 0 ? Math.max(...totalDurance) : 0;
-
-      return acc + maxDurance;
-    }, 0);
-
-    const selectedTime = format(startTime, "HH:mm");
-    const busyTimesBeforeAppointment =
-      calculateBusyTimesBeforeAppointment(selectedTime);
     const availableTimes = [];
     const workingStart = setHours(setMinutes(new Date(), 0), 8);
     const workingEnd = setHours(setMinutes(new Date(), 0), 18);
-
     let currentTime = workingStart;
 
     while (currentTime <= workingEnd) {
-      const endTime = addMinutes(currentTime, duranceTotal);
+      let totalDurance = 0;
+
+      daySelect
+        .filter((item) => format(currentTime, "HH:mm") === item.time)
+        .forEach((item) => {
+          totalDurance += calculateTotalDuration(item);
+        });
+
+      const endTime = addMinutes(currentTime, totalDurance);
 
       const isAvailable = busyTimesBeforeAppointment.every(
         (busyTime) => busyTime < currentTime || busyTime >= endTime
@@ -152,23 +141,12 @@ const Scheduling = () => {
         availableTimes.push(new Date(currentTime));
       }
 
-      const duranceOfCurrentService = daySelect
-        .filter((item) => format(currentTime, "HH:mm") === item.time)
-        .map((item) => item.durance || ["30"]);
-
-      const validDurance = duranceOfCurrentService
-        .flat()
-        .map((d) => parseFloat(d))
-        .filter((d) => !isNaN(d));
-
-      const totalDurance =
-        validDurance.length > 0 ? Math.max(...validDurance) : 30;
-
-      currentTime = addMinutes(currentTime, totalDurance);
+      currentTime = addMinutes(currentTime, totalDurance || 30);
     }
 
     return availableTimes;
   };
+
   const availableTimes = calculateAvailableTimes();
 
   useEffect(() => {
