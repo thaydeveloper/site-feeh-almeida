@@ -98,7 +98,7 @@ export const tableAdditionalServices = [
     title: "Decoração à partir",
     id: 3,
     price: " R$ 20,00",
-    durance: 40,
+    durance: 30,
   },
   {
     title: "Mão Comum ",
