@@ -90,7 +90,7 @@ const Scheduling = () => {
     return 0;
   });
 
-  const calculateTotalDuration = (item) => {
+  function calculateTotalDuration(item) {
     const totalDuration = item.durance
       .filter((duration) => duration !== null)
       .map((d) => parseFloat(d))
@@ -99,11 +99,9 @@ const Scheduling = () => {
     return totalDuration.length > 0
       ? totalDuration.reduce((acc, val) => acc + val)
       : 0;
-  };
+  }
 
-  /* const calculateAvailableTimes = () => {
-    const selectedTime = format(startTime, "HH:mm");
-
+  function calculateAvailableTimes(daySelect, selectedTime) {
     const busyTimesBeforeAppointment = daySelect
       .filter((item) => item.time < selectedTime)
       .map((item) => {
@@ -146,69 +144,12 @@ const Scheduling = () => {
     }
 
     return availableTimes;
-  }; */
-  const selectedTime = format(startTime, "HH:mm");
+  }
 
-  const busyTimesBeforeAppointment = daySelect
-    .filter((item) => item.time < selectedTime)
-    .map((item) => {
-      const totalDuration = calculateTotalDuration(item);
-      const [hours, minutes] = item.time.split(":");
-      const startTime = setHours(
-        setMinutes(new Date(), minutes),
-        parseInt(hours, 10)
-      );
-      const endTime = (startTime, totalDuration);
-      return endTime;
-    });
-  console.log(busyTimesBeforeAppointment);
-  const calculateAvailableTimes = () => {
-    const selectedTime = format(startTime, "HH:mm");
-
-    const busyTimesBeforeAppointment = daySelect
-      .filter((item) => item.time < selectedTime)
-      .map((item) => {
-        const totalDuration = calculateTotalDuration(item);
-        const [hours, minutes] = item.time.split(":");
-        const startTime = setHours(
-          setMinutes(new Date(), minutes),
-          parseInt(hours, 10)
-        );
-        const endTime = addMinutes(startTime, totalDuration);
-        return endTime;
-      });
-
-    const availableTimes = [];
-    const workingStart = setHours(setMinutes(new Date(), 0), 8);
-    const workingEnd = setHours(setMinutes(new Date(), 0), 18);
-    let currentTime = workingStart;
-
-    while (currentTime <= workingEnd) {
-      let totalDuration = 0;
-
-      daySelect
-        .filter((item) => format(currentTime, "HH:mm") === item.time)
-        .forEach((item) => {
-          totalDuration += calculateTotalDuration(item);
-        });
-
-      const endTime = addMinutes(currentTime, totalDuration);
-
-      const isAvailable = busyTimesBeforeAppointment.every(
-        (busyTime) => busyTime < currentTime || busyTime >= endTime
-      );
-
-      if (isAvailable) {
-        availableTimes.push(new Date(currentTime));
-      }
-
-      currentTime = addMinutes(currentTime, totalDuration || 30);
-    }
-
-    return availableTimes;
-  };
-
-  const availableTimes = calculateAvailableTimes();
+  const availableTimes = calculateAvailableTimes(
+    daySelect,
+    format(startTime, "HH:mm")
+  );
 
   useEffect(() => {
     setValue("phone", maskPhoneNumber(phoneValue));
@@ -219,7 +160,6 @@ const Scheduling = () => {
     setValue("services", servicesState);
     setValue("servicesAdditional", servicesAdditional);
     setAllUsers(data);
-    const availableTimes = calculateAvailableTimes();
   }, [phoneValue, startDate, startTime]);
 
   const handleDateChange = (date) => {
