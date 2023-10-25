@@ -85,7 +85,7 @@ export const tableAdditionalServices = [
   {
     title: "Pé",
     id: 1,
-    price: " R$ 26,00",
+    price: "R$ 26,00",
     durance: 150,
   },
   {

@@ -12,7 +12,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 const Adm = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [filterUser, setFilterUser] = useState([]);
-  const [get, setGet] = useState([]);
+
   const [startDate, setStartDate] = useState(new Date());
   const { data } = useContext(MyContext);
 
@@ -38,7 +38,6 @@ const Adm = () => {
   const handleDateChange = (date) => {
     setStartDate(date);
   };
-  console.log(allUsers);
 
   useEffect(() => {
     setValue("date", format(startDate, "PPPP", { locale: ptBR }));
@@ -62,10 +61,11 @@ const Adm = () => {
               <span>Telefone:</span> {user.phone}
             </h3>
             <h3>
-              <span>Serviço:</span> {user.services}
+              <span>Serviço: </span>
+              {(user.services = user.services.replace(/\d+$/, ""))}
             </h3>
             <h3>
-              <span>Serviço Adicional:</span> {user.servicesAdditional}
+              <span>Serviço Adicional: </span> {user.servicesAdditional}
             </h3>
             <h3>
               <span>horario:</span> {user.time}H
@@ -103,10 +103,17 @@ const Adm = () => {
               <span>Telefone:</span> {user.phone}
             </h3>
             <h3>
-              <span>Serviço:</span> {user.services}
+              <span>Serviço: </span>
+              {(user.services = user.services.replace(/\d+$/, ""))}
             </h3>
             <h3>
-              <span>Serviço Adicional:</span> {user.servicesAdditional}
+              <span>Serviço Adicional: </span>
+              {
+                (user.servicesAdditional = user.servicesAdditional.replace(
+                  /\d+$/,
+                  ""
+                ))
+              }
             </h3>
             <h3>
               <span>horario:</span> {user.time}H
