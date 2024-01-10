@@ -38,6 +38,7 @@ const Adm = () => {
   const handleDateChange = (date) => {
     setStartDate(date);
   };
+  console.log(daySelect);
 
   useEffect(() => {
     setValue("date", format(startDate, "PPPP", { locale: ptBR }));
@@ -68,12 +69,12 @@ const Adm = () => {
               <span>Serviço Adicional: </span> {user.servicesAdditional}
             </h3>
             <h3>
-              <span>horario:</span> {user.time}H
+              <span>Horario:</span> {user.time}H
             </h3>
           </div>
         ))}
       </div>
-      <h1 style={{ color: "#fffefe", marginBottom: "30px" }}>Filtrar dia</h1>
+      <h1 style={{ color: "#fffefe", marginBottom: "30px" }}>Filtrar Dia</h1>
       <div className="container__calendar container">
         <Controller
           control={control}
